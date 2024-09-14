@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker compose build'
+                        sh 'docker-compose build'
                     } catch (Exception e) {
                         error "Docker build failed: ${e.message}"
                     }
