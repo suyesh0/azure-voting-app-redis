@@ -52,7 +52,7 @@ pipeline {
                         cd ${WORKSPACE}
 
                         # Run unit tests using unittest
-                        sudo python3 -m unittest discover -s tests
+                        sudo python3.12 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
