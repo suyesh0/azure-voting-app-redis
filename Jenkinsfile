@@ -10,11 +10,12 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    # Example setup commands
-                    # Uncomment and modify the following lines as needed
-                    # python3 -m venv venv
-                    # source venv/bin/activate
-                    # pip install -r requirements.txt
+                    # Create and activate a virtual environment using python3
+                    python3 -m venv venv
+                    source venv/bin/activate
+
+                    # Install dependencies
+                    pip install -r requirements.txt
                     '''
                 }
             }
@@ -29,12 +30,11 @@ pipeline {
                 script {
                     try {
                         sh '''
-                        # Example unit test command
-                        # Replace the following line with your actual unit test command
-                        # For example, for Node.js: npm test
-                        # For example, for Maven: mvn test
-                        # For example, for Python (if not using pytest): python -m unittest discover
-                        npm test
+                        # Activate the virtual environment
+                        source venv/bin/activate
+
+                        # Run unit tests using unittest with python3
+                        python3 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
