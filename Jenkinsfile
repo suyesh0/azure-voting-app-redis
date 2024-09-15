@@ -11,11 +11,11 @@ pipeline {
                 script {
                     sh '''
                     # Create a virtual environment using python3
-                    python3 -m venv /home/ubuntu/venv
+                    sudo python3 -m venv /home/ubuntu/venv
 
                     # Activate the virtual environment and install dependencies using pip3
                     . /home/ubuntu/venv/bin/activate
-                    pip3 install -r requirements.txt
+                    sudo /home/ubuntu/venv/bin/pip3 install -r requirements.txt
                     '''
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
                         sh '''
                         # Activate the virtual environment and run unit tests using python3
                         . /home/ubuntu/venv/bin/activate
-                        python3 -m unittest discover -s tests
+                        sudo /home/ubuntu/venv/bin/python3 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
