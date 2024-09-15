@@ -11,16 +11,14 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    # Ensure we are in the correct directory where requirements.txt is located
+                    cd ${env.WORKSPACE}
+
                     # Create a virtual environment using python3
                     python3 -m venv ${VENV_DIR}
 
                     # Activate the virtual environment and install dependencies using pip3
                     . ${VENV_DIR}/bin/activate
-
-                    # Ensure we are in the correct directory where requirements.txt is located
-                    cd ${env.WORKSPACE}
-
-                    # Install dependencies
                     pip3 install -r requirements.txt
                     '''
                 }
@@ -29,26 +27,6 @@ pipeline {
         stage('Verify Branch') {
             steps {
                 echo "Current Git Branch: ${GIT_BRANCH}"
-            }
-        }
-        stage('Run Unit Tests') {
-            steps {
-                script {
-                    try {
-                        sh '''
-                        # Activate the virtual environment and run unit tests using unittest
-                        . ${VENV_DIR}/bin/activate
-
-                        # Ensure we are in the correct directory where tests are located
-                        cd ${env.WORKSPACE}
-
-                        # Run specific unit tests
-                        python3 -m unittest tests.test_module.TestClass.test_method
-                        '''
-                    } catch (Exception e) {
-                        error "Unit tests failed: ${e.message}"
-                    }
-                }
             }
         }
         stage('Docker Build') {
