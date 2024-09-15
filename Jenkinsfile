@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         GIT_BRANCH = "${env.BRANCH_NAME}"
-        VENV_DIR = "${env.WORKSPACE}/venv"
     }
 
     stages {
@@ -32,12 +31,6 @@ pipeline {
                     echo "Current directory after cd: $(pwd)"
                     echo "Listing files after cd:"
                     ls -la
-
-                    # Create a virtual environment using python3
-                    python3 -m venv ${VENV_DIR}
-
-                    # Activate the virtual environment
-                    source ${VENV_DIR}/bin/activate
                     '''
                 }
             }
