@@ -31,7 +31,7 @@ pipeline {
                     try {
                         sh '''
                         # Activate the virtual environment
-                        source venv/bin/activate
+                        source /home/ubuntu/venv/bin/activate
 
                         # Run unit tests using unittest with python3
                         python3 -m unittest discover -s tests
