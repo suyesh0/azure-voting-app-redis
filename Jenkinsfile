@@ -6,20 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Setup') {
-            steps {
-                script {
-                    sh '''
-                    # Create and activate a virtual environment
-                    python3 -m venv venv
-                    source venv/bin/activate
-
-                    # Install pytest
-                    pip install pytest
-                    '''
-                }
-            }
-        }
         stage('Verify Branch') {
             steps {
                 echo "Current Git Branch: ${GIT_BRANCH}"
@@ -29,13 +15,8 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh '''
-                        # Activate the virtual environment
-                        source venv/bin/activate
-
-                        # Run pytest
-                        pytest tests
-                        '''
+                        // Replace the following command with the command to run your unit tests
+                        sh 'pytest tests' // Example for Python using pytest
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
                     }
@@ -89,3 +70,4 @@ pipeline {
         }
     }
 }
+
