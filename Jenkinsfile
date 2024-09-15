@@ -12,7 +12,7 @@ pipeline {
                     sh '''
                     # Create and activate a virtual environment using python3
                     python3 -m venv venv
-                    source venv/bin/activate
+                    sudo source /home/ubuntu/venv/bin/activate
 
                     # Install dependencies
                     pip install -r requirements.txt
@@ -31,7 +31,7 @@ pipeline {
                     try {
                         sh '''
                         # Activate the virtual environment
-                        source /home/ubuntu/venv/bin/activate
+                        sudo source /home/ubuntu/venv/bin/activate
 
                         # Run unit tests using unittest with python3
                         python3 -m unittest discover -s tests
