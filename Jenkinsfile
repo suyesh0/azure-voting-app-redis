@@ -40,6 +40,26 @@ pipeline {
                 echo "Current Git Branch: ${GIT_BRANCH}"
             }
         }
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                        #!/bin/bash
+                        set -e
+
+                        # Ensure we are in the correct directory
+                        cd ${WORKSPACE}
+
+                        # Run unit tests using unittest
+                        sudo python3 -m unittest discover -s tests
+                        '''
+                    } catch (Exception e) {
+                        error "Unit tests failed: ${e.message}"
+                    }
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
