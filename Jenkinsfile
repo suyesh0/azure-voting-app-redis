@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         GIT_BRANCH = "${env.BRANCH_NAME}"
+        VENV_DIR = "${env.WORKSPACE}/venv"
     }
 
     stages {
@@ -11,11 +12,11 @@ pipeline {
                 script {
                     sh '''
                     # Create a virtual environment using python3
-                    sudo python3 -m venv /home/ubuntu/venv
+                    python3 -m venv ${VENV_DIR}
 
                     # Activate the virtual environment and install dependencies using pip3
-                    . /home/ubuntu/venv/bin/activate
-                    sudo /home/ubuntu/venv/bin/pip3 install -r requirements.txt
+                    . ${VENV_DIR}/bin/activate
+                    pip3 install -r requirements.txt
                     '''
                 }
             }
@@ -31,8 +32,8 @@ pipeline {
                     try {
                         sh '''
                         # Activate the virtual environment and run unit tests using python3
-                        . /home/ubuntu/venv/bin/activate
-                        sudo /home/ubuntu/venv/bin/python3 -m unittest discover -s tests
+                        . ${VENV_DIR}/bin/activate
+                        python3 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
