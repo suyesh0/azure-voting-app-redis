@@ -16,6 +16,11 @@ pipeline {
 
                     # Activate the virtual environment and install dependencies using pip3
                     . ${VENV_DIR}/bin/activate
+
+                    # Ensure we are in the correct directory where requirements.txt is located
+                    cd ${env.WORKSPACE}
+
+                    # Install dependencies
                     pip3 install -r requirements.txt
                     '''
                 }
@@ -33,6 +38,11 @@ pipeline {
                         sh '''
                         # Activate the virtual environment and run unit tests using python3
                         . ${VENV_DIR}/bin/activate
+
+                        # Ensure we are in the correct directory where tests are located
+                        cd ${env.WORKSPACE}
+
+                        # Run unit tests
                         python3 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
