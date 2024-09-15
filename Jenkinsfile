@@ -6,6 +6,19 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+            steps {
+                script {
+                    sh '''
+                    # Example setup commands
+                    # Uncomment and modify the following lines as needed
+                    # python3 -m venv venv
+                    # source venv/bin/activate
+                    # pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
         stage('Verify Branch') {
             steps {
                 echo "Current Git Branch: ${GIT_BRANCH}"
@@ -15,8 +28,14 @@ pipeline {
             steps {
                 script {
                     try {
-                        // Replace the following command with the command to run your unit tests
-                        sh 'pytest tests' // Example for Python using pytest
+                        sh '''
+                        # Example unit test command
+                        # Replace the following line with your actual unit test command
+                        # For example, for Node.js: npm test
+                        # For example, for Maven: mvn test
+                        # For example, for Python (if not using pytest): python -m unittest discover
+                        npm test
+                        '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
                     }
@@ -70,4 +89,3 @@ pipeline {
         }
     }
 }
-
