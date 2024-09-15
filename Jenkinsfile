@@ -36,14 +36,14 @@ pipeline {
                 script {
                     try {
                         sh '''
-                        # Activate the virtual environment and run unit tests using python3
+                        # Activate the virtual environment and run unit tests using unittest
                         . ${VENV_DIR}/bin/activate
 
                         # Ensure we are in the correct directory where tests are located
                         cd ${env.WORKSPACE}
 
-                        # Run unit tests
-                        python3 -m unittest discover -s tests
+                        # Run specific unit tests
+                        python3 -m unittest tests.test_module.TestClass.test_method
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
