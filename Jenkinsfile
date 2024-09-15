@@ -17,24 +17,33 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    #!/bin/bash
+                    set -e
+
                     # Print the current directory and list files
                     echo "Current directory: $(pwd)"
                     echo "Listing files:"
                     ls -la
 
                     # Ensure we are in the correct directory where requirements.txt is located
-                    cd ${env.WORKSPACE}
+                    cd ${WORKSPACE}
 
                     # Print the current directory and list files again
                     echo "Current directory after cd: $(pwd)"
                     echo "Listing files after cd:"
                     ls -la
 
+                    # Check if requirements.txt is not empty
+                    if [ ! -s requirements.txt ]; then
+                        echo "requirements.txt is empty or not found!"
+                        exit 1
+                    fi
+
                     # Create a virtual environment using python3
                     python3 -m venv ${VENV_DIR}
 
                     # Activate the virtual environment and install dependencies using pip3
-                    . ${VENV_DIR}/bin/activate
+                    source ${VENV_DIR}/bin/activate
                     pip3 install -r requirements.txt
                     '''
                 }
