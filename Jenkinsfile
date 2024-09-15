@@ -11,7 +11,7 @@ pipeline {
                 script {
                     sh '''
                     # Create and activate a virtual environment using python3
-                    python3 -m venv venv
+                    sudo python3 -m venv venv
                     sudo source /home/ubuntu/venv/bin/activate
 
                     # Install dependencies
@@ -34,7 +34,7 @@ pipeline {
                         sudo source /home/ubuntu/venv/bin/activate
 
                         # Run unit tests using unittest with python3
-                        python3 -m unittest discover -s tests
+                        sudo python3 -m unittest discover -s tests
                         '''
                     } catch (Exception e) {
                         error "Unit tests failed: ${e.message}"
