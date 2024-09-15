@@ -11,7 +11,7 @@ pipeline {
                 script {
                     sh '''
                     # Create and activate a virtual environment using python3
-                    sudo python3 -m /home/ubuntu/venv venv
+                    sudo python3 -m venv /home/ubuntu/venv
                     sudo source /home/ubuntu/venv/bin/activate
 
                     # Install dependencies
