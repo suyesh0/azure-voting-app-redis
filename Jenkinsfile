@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker-compose build'
+                        sh 'sudo docker-compose build'
                     } catch (Exception e) {
                         error "Docker build failed: ${e.message}"
                     }
@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker-compose up -d'
+                        sh 'sudo docker-compose up -d'
                     } catch (Exception e) {
                         error "Starting application failed: ${e.message}"
                     }
@@ -66,7 +66,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'docker-compose down'
+                        sh 'sudo docker-compose down'
                     } catch (Exception e) {
                         error "Stopping application failed: ${e.message}"
                     }
