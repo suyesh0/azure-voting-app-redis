@@ -51,6 +51,17 @@ pipeline {
                         # Ensure we are in the correct directory
                         cd ${WORKSPACE}
 
+                        # Check if the tests directory exists and is importable
+                        if [ ! -d "tests" ]; then
+                            echo "tests directory does not exist!"
+                            exit 1
+                        fi
+
+                        if [ ! -f "tests/__init__.py" ]; then
+                            echo "Creating __init__.py in tests directory"
+                            touch tests/__init__.py
+                        fi
+
                         # Run unit tests using unittest
                         sudo python3.12 -m unittest discover -s tests
                         '''
