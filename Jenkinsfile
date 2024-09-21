@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'sudo docker-compose build'
+                        sh '/usr/local/lib/docker/cli-plugins/docker-compose build'
                     } catch (Exception e) {
                         error "Docker build failed: ${e.message}"
                     }
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh 'sudo docker-compose up -d'
+                        sh '/usr/local/lib/docker/cli-plugins/docker-compose up -d'
                     } catch (Exception e) {
                         error "Starting application failed: ${e.message}"
                     }
