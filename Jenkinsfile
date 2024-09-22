@@ -3,9 +3,9 @@ pipeline {
     agent any
     environment {
         GIT_BRANCH = "${env.BRANCH_NAME}"
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id') // Replace with your Jenkins credentials ID
-        DOCKERHUB_USERNAME = 'your-dockerhub-username' // Replace with your Docker Hub username
-        DOCKERHUB_REPO = 'your-dockerhub-repo' // Replace with your Docker Hub repository name
+        DOCKERHUB_CREDENTIALS = credentials('78362e3a-8762-448c-8f62-00bb32b681cb') // Replace with your Jenkins credentials ID
+        DOCKERHUB_USERNAME = "${DOCKERHUB_CREDENTIALS_USR}" // Use the username from the credentials
+        DOCKERHUB_REPO = 'suyeshmathur/jenkins' // Replace with your Docker Hub repository name
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
     }
     stages {
