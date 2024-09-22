@@ -1,10 +1,11 @@
+groovy
 pipeline {
     agent any
     environment {
         GIT_BRANCH = "${env.BRANCH_NAME}"
-        DOCKERHUB_CREDENTIALS = credentials('78362e3a-8762-448c-8f62-00bb32b681cb') // Replace with your Jenkins credentials ID
-        DOCKERHUB_USERNAME = "${DOCKERHUB_CREDENTIALS_USR}" // Use the username from the credentials
-        DOCKERHUB_REPO = 'suyeshmathur/jenkins' // Replace with your Docker Hub repository name
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id') // Replace with your Jenkins credentials ID
+        DOCKERHUB_USERNAME = 'your-dockerhub-username' // Replace with your Docker Hub username
+        DOCKERHUB_REPO = 'your-dockerhub-repo' // Replace with your Docker Hub repository name
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
     }
     stages {
@@ -54,9 +55,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh '''
-                        sudo docker tag your-dockerhub-repo:latest ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}
-                        '''
+                        // Extract the image name from the docker-compose.yml file
+                        def imageName = sh(script: "grep 'image:' docker-compose.yml | awk '{print \$2}'", returnStdout: true).trim()
+                        if (imageName) {
+                            sh "sudo docker tag ${imageName} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
+                        } else {
+                            error "Image name not found in docker-compose.yml"
+                        }
                     } catch (Exception e) {
                         error "Tagging Docker image failed: ${e.message}"
                     }
