@@ -6,6 +6,7 @@ pipeline {
         DOCKERHUB_USERNAME = "${DOCKERHUB_CREDENTIALS_USR}" // Use the username from the credentials
         DOCKERHUB_REPO = 'suyeshmathur/jenkins' // Replace with your Docker Hub repository name
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+        IMAGE_NAME = "azure-vote" // Set the image name to azure-vote
     }
     stages {
         stage('Checkout') {
@@ -42,51 +43,33 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    try {
-                        sh 'sudo /usr/local/lib/docker/cli-plugins/docker-compose build'
-                    } catch (Exception e) {
-                        error "Docker build failed: ${e.message}"
-                    }
+                    sh '/usr/local/lib/docker/cli-plugins/docker-compose build'
                 }
             }
         }
         stage('Tag Docker Image') {
             steps {
                 script {
-                    // Extract the image name for the azure-vote-front service from the docker-compose.yml file
-                    def imageName = sh(script: "grep 'image:' docker-compose.yml | grep 'azure-vote-front' | awk '{print \$2}'", returnStdout: true).trim()
-                    echo "Extracted image name: ${imageName}"
-                    if (imageName) {
-                        sh "docker tag ${imageName} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
-                    } else {
-                        error "Image name not found in docker-compose.yml"
-                    }
+                    echo "Tagging image: ${IMAGE_NAME} as ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
+                    sh "docker tag ${IMAGE_NAME} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
                 }
             }
         }
         stage('Docker Login') {
             steps {
                 script {
-                    try {
-                        sh '''
-                        echo ${DOCKERHUB_CREDENTIALS_PSW} | sudo docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                        '''
-                    } catch (Exception e) {
-                        error "Docker login failed: ${e.message}"
-                    }
+                    sh '''
+                    echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                    '''
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
                 script {
-                    try {
-                        sh '''
-                        sudo docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}
-                        '''
-                    } catch (Exception e) {
-                        error "Pushing Docker image failed: ${e.message}"
-                    }
+                    sh '''
+                    docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}
+                    '''
                 }
             }
         }
