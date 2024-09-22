@@ -4,7 +4,7 @@ pipeline {
         GIT_BRANCH = "${env.BRANCH_NAME}"
         DOCKERHUB_CREDENTIALS = credentials('78362e3a-8762-448c-8f62-00bb32b681cb') // Replace with your Jenkins credentials ID
         DOCKERHUB_USERNAME = "${DOCKERHUB_CREDENTIALS_USR}" // Use the username from the credentials
-        DOCKERHUB_REPO = 'suyeshmathur/jenkins' // Replace with your Docker Hub repository name
+        DOCKERHUB_REPO = 'jenkins' // Replace with your Docker Hub repository name
         IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
         IMAGE_NAME = "mcr.microsoft.com/azuredocs/azure-vote-front:v1" // Set the image name from docker-compose.yml
     }
