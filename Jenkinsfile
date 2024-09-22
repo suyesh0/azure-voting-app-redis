@@ -2,6 +2,10 @@ pipeline {
     agent any
     environment {
         GIT_BRANCH = "${env.BRANCH_NAME}"
+        DOCKERHUB_CREDENTIALS = credentials('78362e3a-8762-448c-8f62-00bb32b681cb') // Replace with your Jenkins credentials ID
+        DOCKERHUB_USERNAME = "${DOCKERHUB_CREDENTIALS_USR}" // Use the username from the credentials
+        DOCKERHUB_REPO = 'suyeshmathur/jenkins' // Replace with your Docker Hub repository name
+        IMAGE_TAG = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
     }
     stages {
         stage('Checkout') {
@@ -46,13 +50,41 @@ pipeline {
                 }
             }
         }
-        stage('Start Application') {
+        stage('Tag Docker Image') {
             steps {
                 script {
                     try {
-                        sh 'sudo /usr/local/lib/docker/cli-plugins/docker-compose up -d'
+                        sh '''
+                        sudo docker tag your-dockerhub-repo:latest ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}
+                        '''
                     } catch (Exception e) {
-                        error "Starting application failed: ${e.message}"
+                        error "Tagging Docker image failed: ${e.message}"
+                    }
+                }
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                        echo ${DOCKERHUB_CREDENTIALS_PSW} | sudo docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                        '''
+                    } catch (Exception e) {
+                        error "Docker login failed: ${e.message}"
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh '''
+                        sudo docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}
+                        '''
+                    } catch (Exception e) {
+                        error "Pushing Docker image failed: ${e.message}"
                     }
                 }
             }
