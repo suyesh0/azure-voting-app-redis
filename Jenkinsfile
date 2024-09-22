@@ -53,16 +53,13 @@ pipeline {
         stage('Tag Docker Image') {
             steps {
                 script {
-                    try {
-                        // Extract the image name from the docker-compose.yml file
-                        def imageName = sh(script: "grep 'image:' docker-compose.yml | awk '{print \$2}'", returnStdout: true).trim()
-                        if (imageName) {
-                            sh "sudo docker tag ${imageName} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
-                        } else {
-                            error "Image name not found in docker-compose.yml"
-                        }
-                    } catch (Exception e) {
-                        error "Tagging Docker image failed: ${e.message}"
+                    // Extract the image name for the azure-vote-front service from the docker-compose.yml file
+                    def imageName = sh(script: "grep 'image:' docker-compose.yml | grep 'azure-vote-front' | awk '{print \$2}'", returnStdout: true).trim()
+                    echo "Extracted image name: ${imageName}"
+                    if (imageName) {
+                        sh "docker tag ${imageName} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${IMAGE_TAG}"
+                    } else {
+                        error "Image name not found in docker-compose.yml"
                     }
                 }
             }
